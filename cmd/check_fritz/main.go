@@ -9,7 +9,7 @@ import (
 )
 
 // program version
-var version = "1.1.0"
+const version = "1.1.0"
 
 // internal exit codes
 const (
@@ -124,6 +124,11 @@ func HandleError(err error) bool {
 func main() {
 	app := cli.NewApp()
 
+	app.Name = "check_fritz"
+	app.HelpName = "check_fritz"
+	app.Usage = "Check plugin written in Go to monitor a Fritz!Box"
+	app.Version = version
+
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "hostname, H",
@@ -237,6 +242,19 @@ func main() {
 
 		return nil
 	}
+
+	cli.AppHelpTemplate = `NAME:
+   {{.Name}} - {{.Usage}}
+
+USAGE:
+   {{.HelpName}} {{if .VisibleFlags}}[OPTIONS]{{end}}{{if .VisibleFlags}}
+
+OPTIONS:
+   {{range .VisibleFlags}}{{.}}
+   {{end}}{{end}}{{if .Version}}
+VERSION:
+   {{.Version}}
+   {{end}}`
 
 	err := app.Run(os.Args)
 	if err != nil {
